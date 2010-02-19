@@ -1,4 +1,4 @@
-spreadshee2seqdiagram
+spreadsheet2seqdiagram
 =====================
 
 Grabs system calls from a google spreadsheet and generates sequence diagrams using http://www.websequencediagrams.com
