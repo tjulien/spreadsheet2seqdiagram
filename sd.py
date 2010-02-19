@@ -27,4 +27,4 @@ style = "qsd"
 text = "alice->bob: authentication request\nbob-->alice: response"
 pngFile = "out.png"
 
-getSequenceDiagram( text, pngFile, style ) 
+get_seq_diag( text, pngFile, style )
