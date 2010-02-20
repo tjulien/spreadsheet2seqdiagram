@@ -54,8 +54,23 @@ class SSClient(object):
 
     def create_seq_diag_input(self, calls):
         input = ''
-        for call in calls:
-            input += call['caller'] + " -> " + call['callee'] + ": " + call['input'] + '\n'
+        return_stack = []
+        for i, call in enumerate(calls):
+            input += call['caller'] + " -> " + call['callee'] + ": {" + call['input'] + '}\n'
+            return_call = call['callee'] + " -> " + call['caller'] + ": {" + call['result'] + '}\n'
+            if(i < len(calls) - 1):
+                if calls[i + 1]['caller'] == call['callee']:
+                    # save return for later
+                    return_stack.append(return_call)
+                else:
+                    # return call immediately
+                    input += return_call
+            else:
+                # end of the calls, now pop return_stack
+                input += return_call
+                return_stack.reverse()
+                for return_call in return_stack:
+                    input += return_call
         return input
 
     def get_seq_diag(self, text, outputFile, style = 'modern-blue' ):
