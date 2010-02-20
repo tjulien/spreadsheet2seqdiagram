@@ -31,30 +31,52 @@ class SSClient(object):
                 return ws
         return None
 
-def get_seq_diag( text, outputFile, style = 'default' ):
-    request = {}
-    request["message"] = text
-    request["style"] = style
+    def get_rows(self, ss, ws, row_start, row_end):
+        ss_id = ss.id.text
+        ss_id_parts = ss_id.split('/')
+        ss_key = ss_id_parts[len(ss_id_parts) - 1] # trailing key=value pair
 
-    url = urllib.urlencode(request)
+        ws_id = ws.id.text
+        ws_id_parts = ws_id.split('/')
+        ws_key = ws_id_parts[len(ws_id_parts) - 1] # trailing key=value pair
+        row_feed = self.client.GetListFeed(ss_key, ws_key)
+        return row_feed.entry[row_start - 2:row_end - 1]
 
-    f = urllib.urlopen("http://www.websequencediagrams.com/", url)
-    line = f.readline()
-    f.close()
+    def get_calls(self, rows):
+        calls = []
+        for row in rows:
+            cells = row.__dict__['custom']
+            row_dict = {}
+            for key,value in cells.iteritems():
+                row_dict[key] = value.text
+            calls.append(row_dict)
+        return calls
 
-    expr = re.compile("(\?img=[a-zA-Z0-9]+)")
-    m = expr.search(line)
+    def create_seq_diag_input(self, calls):
+        input = ''
+        for call in calls:
+            input += call['caller'] + " -> " + call['callee'] + ": " + call['input'] + '\n'
+        return input
 
-    if m == None:
-        print "Invalid response from server."
-        return False
-
-    urllib.urlretrieve("http://www.websequencediagrams.com/" + m.group(0),
-            outputFile )
-    return True
-
-style = "qsd"
-text = "alice->bob: authentication request\nbob-->alice: response"
-pngFile = "out.png"
-
-get_seq_diag( text, pngFile, style )
+    def get_seq_diag(self, text, outputFile, style = 'modern-blue' ):
+        request = {}
+        request["message"] = text
+        request["style"] = style
+        
+        url = urllib.urlencode(request)
+        
+        f = urllib.urlopen("http://www.websequencediagrams.com/", url)
+        line = f.readline()
+        f.close()
+        
+        expr = re.compile("(\?img=[a-zA-Z0-9]+)")
+        m = expr.search(line)
+        
+        if m == None:
+            print "Invalid response from server."
+            return False
+        
+        urllib.urlretrieve("http://www.websequencediagrams.com/" + m.group(0),
+                           outputFile )
+        return True
+    
