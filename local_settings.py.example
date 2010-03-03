@@ -1,0 +1,9 @@
+# substitute your own values and rename to local_settings.py
+
+SPREADSHEET_CLIENT = # 'limewire-ss2sd-0.1'
+USERNAME = ''
+PASSWORD = ''
+SPREADSHEET_URL = ''# 'http://spreadsheets.google.com/ccc?key=0AtIpI26ufpzXdDJBbXdxQkpCYk8xQjJqZGtoNDZaMHc'
+WORKSHEET_NAME = '' # 'Stories and services'
+JIRA_PREFIX = '' # 'https://www.limewire.org/jira/browse/'
+HOST = '' # 'http://10.254.193.77:8000/assets/'
