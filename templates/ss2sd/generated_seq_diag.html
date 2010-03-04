@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+<head>
+    <title>Sequence Diagram</title>
+</head>
+<body>
+  <img src="{{host}}{{start}}-{{end}}-outfile.png"/><BR>
+{{story}}<BR>
+{%for jira in jiras %}
+<a href="{{jira}}">{{jira}}</a><BR>
+{% endfor %}
+<form id="frm_upload" enctype="multipart/form-data" method="post" action=".">
+  <div class="input_wrapper">
+    <label for="id_name">start row</label>
+    <input type="text" name="start" class="txtbox" value="{{start}}"/>
+  </div>
+  <div class="input_wrapper">
+    <label for="id_file">end row</label>
+    <input type="text" name="end" class="txtbox" value="{{end}}"/>
+  </div>
+  <input type="submit" name="submit" value="submit" class="btn_submit" />
+</form>
+<form id="browse_next" enctype="multipart/form-data" method="post" action="./browse_next">
+  <input type="submit" name="browse next" value="browse next" class="btn_submit" />
+  <input type="hidden" name="previous_end" value="{{end}}"/>
+</form>
+
+</body>
+</html>
